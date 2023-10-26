@@ -14,9 +14,7 @@ function Recipe(props){
                     <img src={props.recipe.imgUri} alt="RecipeImage"></img>
                 </div>
                 <div>
-                    <p>
                        <Card.Text>{props.recipe.description}</Card.Text>
-                    </p>
                 </div>
             </Card.Body>
         </Card>
