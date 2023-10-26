@@ -538,7 +538,7 @@ const recipes =[
 function App() {
   return (
     <div className="App">
-      <div class="header">
+      <div className="header">
         <header>
           <h1>Kuchařka</h1>
             <p>Vítejte v aplikaci Kuchařka!
@@ -546,7 +546,7 @@ function App() {
             </p>
         </header>
       </div>
-      <div class="main">
+      <div className="main">
         <RecipeList recipeList = {recipes}/>
       </div>
     </div>
