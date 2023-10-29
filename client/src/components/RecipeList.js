@@ -1,21 +1,23 @@
 import React, {useState, useMemo} from "react";
 import RecipeGridList from "./RecipeGridList";
 import RecipeTableList from "./RecipeTableList";
+import styles from "../css/recipe.module.css";
+
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Icon from "@mdi/react";
 
+import Icon from "@mdi/react";
 import {mdiTable, mdiViewGridOutline, mdiMagnify} from "@mdi/js";
 
 const ViewState = {
-  bigGrid: 'bigGrid',
-  smallGrid: 'smallGrid',
-  table: 'table',
+  BIG_GRID: 'big_grid',
+  SMALL_GRID: 'small_grid',
+  TABLE: 'table',
 };
 
 function RecipeList(props) {
-  const [viewType, setViewType] = useState(ViewState.bigGrid);
+  const [viewType, setViewType] = useState(ViewState.BIG_GRID);
   const [searchBy, setSearchBy] = useState("");
 
   const filteredRecipeList = useMemo(() => {
@@ -34,56 +36,56 @@ function RecipeList(props) {
     setSearchBy(event.target["searchInput"].value);
   }
 
-  function handleSearchFieldDelete(event) {
+  function handleSearchDelete(event) {
     if (!event.target.value) setSearchBy("");
   }
 
   function switchView(viewType) {
     switch (viewType) {
-      case ViewState.bigGrid:
-        return <RecipeGridList recipeList={filteredRecipeList}/>;
-      case ViewState.smallGrid:
-        return <RecipeGridList recipeList={filteredRecipeList}/>;
-      case ViewState.table:
+      case ViewState.BIG_GRID:
+        return <RecipeGridList recipeList={filteredRecipeList} ingredientList={props.ingredientList} isBigCard={true}/>;
+      case ViewState.SMALL_GRID:
+        return <RecipeGridList recipeList={filteredRecipeList} ingredientList={props.ingredientList} isBigCard={false}/>;
+      case ViewState.TABLE:
         return <RecipeTableList recipeList={filteredRecipeList}/>;
       default:
-        return <RecipeGridList recipeList={filteredRecipeList}/>;
+        return <RecipeGridList recipeList={filteredRecipeList} isBigCard={true}/>;
+    }
+  }
+
+  function switchViewType(viewType) {
+    switch (viewType) {
+      case ViewState.BIG_GRID:
+        return ViewState.SMALL_GRID;
+      case ViewState.SMALL_GRID:
+        return ViewState.TABLE;
+      case ViewState.TABLE:
+        return ViewState.BIG_GRID;
+      default:
+        return ViewState.BIG_GRID;
     }
   }
 
   function chooseIcon(viewType) {
     switch (viewType) {
-      case ViewState.bigGrid:
+      case ViewState.BIG_GRID:
         return mdiViewGridOutline;
-      case ViewState.smallGrid:
+      case ViewState.SMALL_GRID:
         return mdiViewGridOutline;
-      case ViewState.table:
+      case ViewState.TABLE:
         return mdiTable;
       default:
         return mdiViewGridOutline;
     }
   }
 
-  function switchViewType(viewType) {
-    switch (viewType) {
-      case ViewState.bigGrid:
-        return ViewState.smallGrid;
-      case ViewState.smallGrid:
-        return ViewState.table;
-      case ViewState.table:
-        return ViewState.bigGrid;
-      default:
-        return ViewState.bigGrid;
-    }
-  }
-
   function chooseText(viewType) {
     switch (viewType) {
-      case ViewState.bigGrid:
-        return "Velké dlaždice";
-      case ViewState.smallGrid:
-        return "Malé dlaždice";
-      case ViewState.table:
+      case ViewState.BIG_GRID:
+        return "Velká mřížka";
+      case ViewState.SMALL_GRID:
+        return "Malá mřížka";
+      case ViewState.TABLE:
         return "Tabulka";
       default:
         return mdiViewGridOutline;
@@ -92,7 +94,8 @@ function RecipeList(props) {
 
   return (
       <div>
-        <Navbar>
+        <h1>Kuchařka online</h1>
+        <Navbar bg="light">
           <div className="container-fluid">
             <Navbar.Brand>Seznam receptů</Navbar.Brand>
             <div>
@@ -103,7 +106,7 @@ function RecipeList(props) {
                     type="search"
                     placeholder="Search"
                     aria-label="Search"
-                    onChange={handleSearchFieldDelete}
+                    onChange={handleSearchDelete}
                 />
                 <Button
                     style={{marginRight: "8px"}}
@@ -127,7 +130,7 @@ function RecipeList(props) {
             </div>
           </div>
         </Navbar>
-        <div>
+        <div className={styles.recipeList}>
           {switchView(viewType)}
         </div>
       </div>

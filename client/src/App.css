@@ -1,15 +1,5 @@
-/*
-Colour pallette
---light-green: #8cff98ff;
---yellow-green: #aad922ff;
---olive: #6f7c12ff;
---caf-noir: #483519ff;
---black: #000000ff;
-*/
 .App {
-  background-image: url("kitchen.jpg");
   text-align: center;
-  color: #000000ff;
 }
 
 .App-logo {
@@ -36,17 +26,6 @@ Colour pallette
 
 .App-link {
   color: #61dafb;
-  width: 50%;
-  height: 50%;
-}
-.card{
-  background-color: white;
-}
-img{
-  max-width: 50%;
-}
-p{
-  margin: 30%;
 }
 
 @keyframes App-logo-spin {

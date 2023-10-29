@@ -1,0 +1,18 @@
+.cookbookPage {
+  padding: 1% 1%;
+  max-width: 90%;
+  margin: auto;
+}
+
+.loading {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error {
+  background-color: rgb(167, 40, 59);
+  padding: 10px;
+}
