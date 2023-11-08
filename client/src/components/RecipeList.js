@@ -8,8 +8,8 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
 import Icon from "@mdi/react";
-import {mdiTable, mdiViewGridOutline, mdiMagnify} from "@mdi/js";
-
+import {mdiTable, mdiViewGridOutline, mdiMagnify,mdiPlus} from "@mdi/js";
+import RecipeCreateModal from "./RecipeCreate";
 const ViewState = {
   BIG_GRID: 'big_grid',
   SMALL_GRID: 'small_grid',
@@ -19,7 +19,7 @@ const ViewState = {
 function RecipeList(props) {
   const [viewType, setViewType] = useState(ViewState.BIG_GRID);
   const [searchBy, setSearchBy] = useState("");
-
+  const [addRecipeShow, setRecipeShow] = useState(false);
   const filteredRecipeList = useMemo(() => {
     return props.recipeList.filter((item) => {
       return (
@@ -39,7 +39,8 @@ function RecipeList(props) {
   function handleSearchDelete(event) {
     if (!event.target.value) setSearchBy("");
   }
-
+  const RecipeShow = () => setRecipeShow(true);
+  
   function switchView(viewType) {
     switch (viewType) {
       case ViewState.BIG_GRID:
@@ -92,49 +93,91 @@ function RecipeList(props) {
     }
   }
 
-  return (
-      <div>
-        <h1>Kuchařka online</h1>
-        <Navbar bg="light">
-          <div className="container-fluid">
-            <Navbar.Brand>Seznam receptů</Navbar.Brand>
-            <div>
-              <Form className="d-flex" onSubmit={handleSearch}>
-                <Form.Control
-                    id={"searchInput"}
-                    style={{maxWidth: "150px"}}
-                    type="search"
-                    placeholder="Search"
-                    aria-label="Search"
-                    onChange={handleSearchDelete}
-                />
-                <Button
-                    style={{marginRight: "8px"}}
-                    variant="outline-success"
-                    type="submit"
-                >
-                  <Icon size={1} path={mdiMagnify}/>
-                </Button>
-                <Button
-                    variant="outline-primary"
-                    onClick={() =>
-                        setViewType((currentState) => {
-                          return switchViewType(currentState);
-                        })
-                    }
-                >
-                  <Icon size={1} path={chooseIcon(viewType)}/>{" "}
-                  {chooseText(viewType)}
-                </Button>
-              </Form>
-            </div>
-          </div>
-        </Navbar>
-        <div className={styles.recipeList}>
+  function getChild(viewType) {
+    return (<div className="container">
+      {filteredRecipeList.length ? (<div className="container">
+        <div className={"d-block d-md-none"}>
+          <RecipeGridList recipeList={filteredRecipeList} ingredientList={props.ingredientList}
+                          isBigCard={false}/>
+        </div>
+        <div className={"d-none d-md-block"}>
           {switchView(viewType)}
         </div>
+      </div>) : (<div style={{margin: "16px auto", textAlign: "center"}}>
+        Nejsou žádné recepty k zobrazení.
+      </div>)}
+    </div>);
+  }
+
+  return (<>
+      <div>
+        <h1>Kuchařka online</h1>
+        <Navbar bg="light" collapseOnSelect expand="sm">
+        <div className="container-fluid">
+          <Navbar.Brand>Seznam receptů</Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
+          <Navbar.Collapse style={{justifyContent: "right"}}>
+            <Form className="d-flex" onSubmit={handleSearch}>
+              <Form.Control
+                  id={"searchInput"}
+                  style={{maxWidth: "150px"}}
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                  onChange={handleSearchDelete}
+              />
+              <Button
+                  style={{marginRight: "8px"}}
+                  variant="outline-success"
+                  type="submit"
+              >
+                <Icon size={1} style={{verticalAlign: "top"}} path={mdiMagnify}/>
+              </Button>
+              <Button style={{marginRight: "8px"}}
+                      variant="outline-success"
+                      onClick={RecipeShow}
+              >
+                <div className={"row no-gutters "}>
+                  <div className={"col-sm-12 col-md-2 px-md-1"}>
+                    <Icon size={1} style={{verticalAlign: "top"}} path={mdiPlus}/>
+                  </div>
+                  <div className={"col-md-10 px-1 d-none d-md-block"}>
+                    Vytvořit
+                  </div>
+                </div>
+              </Button>
+              <Button
+                  className={"d-none d-md-block"}
+                  variant="outline-primary"
+                  onClick={() => setViewType((currentState) => {
+                    return switchViewType(currentState);
+                  }
+                  )
+                }
+              >
+                <div className={"row no-gutters "}>
+                  <div className={"col-sm-2 p-1"}>
+                    <Icon size={1} style={{verticalAlign: "top"}} path={chooseIcon(viewType)}/>
+                  </div>
+                  <div className={"col-sm-10 p-1"}>
+                    {chooseText(viewType)}
+                  </div>
+                </div>
+              </Button>
+            </Form>
+          </Navbar.Collapse>
+        </div>
+      </Navbar>
+      <div className={styles.recipeList}>
+        {getChild(viewType)}
       </div>
-  );
+    </div>
+    <RecipeCreateModal
+        ingredientList={props.ingredientList}
+        show={addRecipeShow}
+        setAddRecipeShow={RecipeShow}
+    />
+  </>);
 }
 
 export default RecipeList;
