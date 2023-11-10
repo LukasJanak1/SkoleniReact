@@ -13,8 +13,13 @@ const State = {
 function Cookbook() {
   const handleRecipeCreated = (recipe) => {
     if (recipeListCall.state === State.SUCCESS) {
+      let recipeList = [...recipeListCall.data];
+
+      if (recipe.id) {
+        recipeList = recipeList.filter((r) => r.id !== recipe.id);
+      }
       setRecipeListCall({
-        state: State.SUCCESS, data: [...recipeListCall.data, recipe]
+        state: State.SUCCESS, data: [...recipeList, recipe]
       });
     }
   }

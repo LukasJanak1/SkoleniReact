@@ -19,7 +19,9 @@ const ViewState = {
 function RecipeList(props) {
   const [viewType, setViewType] = useState(ViewState.BIG_GRID);
   const [searchBy, setSearchBy] = useState("");
-  const [addRecipeShow, setRecipeShow] = useState(false);
+  const [addRecipeShow, setRecipeShow] = useState({
+  state: false
+  });
   const filteredRecipeList = useMemo(() => {
     return props.recipeList.filter((item) => {
       return (
@@ -39,18 +41,18 @@ function RecipeList(props) {
   function handleSearchDelete(event) {
     if (!event.target.value) setSearchBy("");
   }
-  const RecipeShow = () => setRecipeShow(true);
+  const RecipeShow = (data) => setRecipeShow({state: true,data});
   
   function switchView(viewType) {
     switch (viewType) {
       case ViewState.BIG_GRID:
-        return <RecipeGridList recipeList={filteredRecipeList} ingredientList={props.ingredientList} isBigCard={true}/>;
+        return <RecipeGridList recipeList={filteredRecipeList} ingredientList={props.ingredientList} isBigCard={true} handleAddRecipeShow={addRecipeShow}/>;
       case ViewState.SMALL_GRID:
-        return <RecipeGridList recipeList={filteredRecipeList} ingredientList={props.ingredientList} isBigCard={false}/>;
+        return <RecipeGridList recipeList={filteredRecipeList} ingredientList={props.ingredientList} isBigCard={false} handleAddRecipeShow={addRecipeShow}/>;
       case ViewState.TABLE:
-        return <RecipeTableList recipeList={filteredRecipeList}/>;
+        return <RecipeTableList recipeList={filteredRecipeList} handleAddRecipeShow={addRecipeShow}/>;
       default:
-        return <RecipeGridList recipeList={filteredRecipeList} isBigCard={true}/>;
+        return <RecipeGridList recipeList={filteredRecipeList} isBigCard={true} handleAddRecipeShow={addRecipeShow}/>;
     }
   }
 
