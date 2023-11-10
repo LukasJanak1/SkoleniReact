@@ -176,6 +176,7 @@ function RecipeList(props) {
         ingredientList={props.ingredientList}
         show={addRecipeShow}
         setAddRecipeShow={RecipeShow}
+        onComplete={(recipe) => props.onComplete(recipe)}
     />
   </>);
 }

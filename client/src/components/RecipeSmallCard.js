@@ -1,6 +1,5 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
-import styles from "../css/recipe.module.css";
 import {shorter} from "../helpers/common";
 
 class RecipeSmallCard extends React.Component {

@@ -11,6 +11,13 @@ const State = {
 };
 
 function Cookbook() {
+  const handleRecipeCreated = (recipe) => {
+    if (recipeListCall.state === State.SUCCESS) {
+      setRecipeListCall({
+        state: State.SUCCESS, data: [...recipeListCall.data, recipe]
+      });
+    }
+  }
   const [recipeListCall, setRecipeListCall] = useState({
     state: State.PENDING,
   });
@@ -52,7 +59,7 @@ function Cookbook() {
     if (recipeListCall.state === State.SUCCESS && ingredientListCall.state === State.SUCCESS) {
       return (
           <div className="container">
-            <RecipeList recipeList={recipeListCall.data} ingredientList = {ingredientListCall.data}/>
+            <RecipeList recipeList={recipeListCall.data} ingredientList = {ingredientListCall.data} onComplete={(recipe) => handleRecipeCreated(recipe)}/>
           </div>
       );
     } else if (recipeListCall.state === State.ERROR || ingredientListCall.state === State.ERROR) {
